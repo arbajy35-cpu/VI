@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Gradle distributions
+gradle-*.zip
+gradle-*/
+
+# Local properties
+local.properties
+
+# APKs
+*.apk
+*.aab
+
+# IDE
+.idea/
+*.iml
+
+# Version file (optional)
+version.txt
