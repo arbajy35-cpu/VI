@@ -19,11 +19,19 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Grant execute permission
-        run: chmod +x ./gradlew || true
+      # 🔥 ANDROID SDK SETUP (MISSING PART)
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
+      - name: Accept SDK licenses
+        run: yes | sdkmanager --licenses
+
+      - name: Grant execute permission
+        run: chmod +x ./gradlew
+
+      # 🔥 DEBUG LOG ENABLED
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --stacktrace --info
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
