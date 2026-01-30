@@ -21,23 +21,25 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 3️⃣ Set up Android SDK
+      # 3️⃣ Setup Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 4️⃣ Accept licenses
-      - name: Accept SDK licenses
-        run: yes | sdkmanager --licenses
+      # 4️⃣ Install SDK platforms & build-tools (explicit)
+      - name: Install SDK Platforms & Build Tools
+        run: |
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+          yes | sdkmanager --licenses
 
       # 5️⃣ Grant gradle execute permission
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
-      # 6️⃣ Clean & refresh dependencies
+      # 6️⃣ Clean project & refresh dependencies
       - name: Clean & Refresh Dependencies
         run: ./gradlew clean --refresh-dependencies
 
-      # 7️⃣ Build APK (debug) with all fresh dependencies
+      # 7️⃣ Build APK with full stacktrace
       - name: Build Debug APK (Clean Logs)
         run: ./gradlew assembleDebug --refresh-dependencies --stacktrace --no-daemon --warning-mode all
 
