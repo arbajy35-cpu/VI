@@ -10,28 +10,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout project
       - name: Checkout project
         uses: actions/checkout@v4
 
+      # 2️⃣ Set up JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
+      # 3️⃣ Set up Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      # 4️⃣ Accept licenses
       - name: Accept SDK licenses
         run: yes | sdkmanager --licenses
 
+      # 5️⃣ Grant gradle execute permission
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
-      # 🔥 REAL ERROR ONLY (NO LOG SPAM)
-      - name: Build Debug APK (Clean Logs)
-        run: ./gradlew assembleDebug --stacktrace --no-daemon --warning-mode all
+      # 6️⃣ Clean & refresh dependencies
+      - name: Clean & Refresh Dependencies
+        run: ./gradlew clean --refresh-dependencies
 
+      # 7️⃣ Build APK (debug) with all fresh dependencies
+      - name: Build Debug APK (Clean Logs)
+        run: ./gradlew assembleDebug --refresh-dependencies --stacktrace --no-daemon --warning-mode all
+
+      # 8️⃣ Upload generated APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
