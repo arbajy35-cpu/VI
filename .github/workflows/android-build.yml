@@ -19,7 +19,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 🔥 ANDROID SDK SETUP (MISSING PART)
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
@@ -29,9 +28,9 @@ jobs:
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
-      # 🔥 DEBUG LOG ENABLED
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace --info
+      # 🔥 REAL ERROR ONLY (NO LOG SPAM)
+      - name: Build Debug APK (Clean Logs)
+        run: ./gradlew assembleDebug --stacktrace --no-daemon --warning-mode all
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
