@@ -1,15 +1,43 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>VI</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VI AI Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<h1>VI Online 🔥</h1>
-	<button onclick="sayHi()">Click Me</button>
+  <!-- Android WebView SAFE -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<script src="script.js"></script>
-  </body>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app">
+    <header class="top-bar">
+      <!--  emoji removed  crash fix -->
+      <div class="logo">VI</div>
+      <div class="tag">AI ONLINE</div>
+    </header>
+
+    <div class="chat-box" id="chatBox">
+      <div class="msg ai">
+        Hello, I am <b>VI</b>. Ask me anything.
+      </div>
+    </div>
+
+    <div class="input-bar">
+      <input
+        type="text"
+        id="userInput"
+        placeholder="Message VI..."
+        autocomplete="off"
+      >
+      <!--  arrow symbol removed -->
+      <button onclick="sendMessage()">SEND</button>
+    </div>
+  </div>
+
+  <!-- JS always at bottom -->
+  <script src="script.js"></script>
+</body>
 </html>
