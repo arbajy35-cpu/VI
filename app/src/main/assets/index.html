@@ -1,43 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>VI AI Chat</title>
+  <meta charset="utf-8">
+  <title>VI TEST</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Android WebView SAFE -->
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <!-- 🔥 HARD JS CRASH TEST -->
+  <script>
+    // HARD TEST — must trigger error
+    throw new Error("TEST ERROR: HTML loaded but JS crashed");
+  </script>
 
-  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-  <div class="app">
-    <header class="top-bar">
-      <!--  emoji removed  crash fix -->
-      <div class="logo">VI</div>
-      <div class="tag">AI ONLINE</div>
-    </header>
-
-    <div class="chat-box" id="chatBox">
-      <div class="msg ai">
-        Hello, I am <b>VI</b>. Ask me anything.
-      </div>
-    </div>
-
-    <div class="input-bar">
-      <input
-        type="text"
-        id="userInput"
-        placeholder="Message VI..."
-        autocomplete="off"
-      >
-      <!--  arrow symbol removed -->
-      <button onclick="sendMessage()">SEND</button>
-    </div>
-  </div>
-
-  <!-- JS always at bottom -->
-  <script src="script.js"></script>
+<body style="background:black;color:white;font-family:sans-serif;">
+  <h1>HTML ONLY TEST</h1>
+  <p>If app still goes back → Android / WebView problem</p>
 </body>
 </html>
+ 
