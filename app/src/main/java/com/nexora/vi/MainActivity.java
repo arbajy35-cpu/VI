@@ -1,7 +1,10 @@
 package com.nexora.vi;
 
 import android.os.Bundle;
-import android.webkit.*;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,29 +24,25 @@ public class MainActivity extends AppCompatActivity {
         s.setAllowFileAccess(true);
         s.setAllowContentAccess(true);
 
-        // 🔥 NO BACK, NO SILENT FAIL
+        // ✅ OLD + SAFE WebViewClient (NO API ISSUE)
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public void onReceivedError(
                     WebView view,
-                    WebResourceRequest request,
-                    WebResourceError error
+                    int errorCode,
+                    String description,
+                    String failingUrl
             ) {
-                showError("WEBVIEW ERROR:\n" + error.getDescription());
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                // page loaded = good sign
+                showError("WEBVIEW ERROR:\n" + description);
             }
         });
 
+        // ✅ SAFE WebChromeClient
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
-            public boolean onConsoleMessage(ConsoleMessage cm) {
-                showError("JS ERROR:\n" + cm.message());
-                return true;
+            public void onConsoleMessage(String message, int lineNumber, String sourceID) {
+                showError("JS ERROR:\n" + message + "\nline: " + lineNumber);
             }
         });
 
@@ -52,15 +51,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void showError(String msg) {
         webView.loadData(
-            "<html><body style='background:#111;color:#f55;font-family:monospace;padding:16px;'>" +
-            "<h2>VI ERROR</h2><pre>" + msg + "</pre></body></html>",
-            "text/html",
-            "utf-8"
+                "<html><body style='background:#111;color:#f55;font-family:monospace;padding:16px;'>" +
+                "<h2>VI ERROR</h2><pre>" + msg + "</pre></body></html>",
+                "text/html",
+                "utf-8"
         );
     }
 
     @Override
     public void onBackPressed() {
-        // ❌ Disable back completely
+        // 🔒 Disable back
     }
 }
