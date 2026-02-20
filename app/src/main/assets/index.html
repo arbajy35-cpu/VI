@@ -1,30 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>VI AI Chat</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VI</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
-<div class="app">
-  <header class="top-bar">
-    <div class="logo">VI</div>
-    <div class="tag">AI ONLINE</div>
-  </header>
-
-  <div class="chat-box" id="chatBox">
-    <div class="msg ai">Hello, I am <b>VI</b>. Ask me anything.</div>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h3>Nova</h3>
+    <i class="fas fa-xmark" id="closeSidebar"></i>
   </div>
 
-  <div class="input-bar">
-    <input type="text" id="userInput" placeholder="Message VI..." autocomplete="off">
-    <button onclick="sendMessage()">SEND</button>
+  <div class="chat-history">
+    <div class="chat-item active">New chat</div>
+    <div class="chat-item">Help me write</div>
+    <div class="chat-item">Brainstorm ideas</div>
+  </div>
+
+  <button id="testBtn">Test Server</button>
+  <p id="testResult"></p>
+
+  <div class="sidebar-footer">
+    <div class="side-btn"><i class="fas fa-gear"></i> Settings</div>
+    <div class="side-btn"><i class="fas fa-user"></i> Account</div>
   </div>
 </div>
 
+<div class="overlay" id="overlay"></div>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <button class="icon-btn" id="menuBtn">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <div class="try-pill" id="tryGoBtn">
+    <span class="dot"></span>
+    <span>Try Go</span>
+  </div>
+
+  <div class="icon-group">
+    <i class="far fa-user"></i>
+    <i class="fas fa-globe"></i>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+  <section class="hero">
+    <h1>What can I help with?</h1>
+
+    <div class="actions">
+      <button><i class="fas fa-image"></i>Create image</button>
+      <button><i class="fas fa-lightbulb"></i>Brainstorm</button>
+      <button><i class="fas fa-pen"></i>Help me write</button>
+      <button><i class="fas fa-plus"></i>More</button>
+    </div>
+  </section>
+</main>
+
+<!-- INPUT BAR -->
+<footer class="input-bar">
+  <button class="plus">+</button>
+  <input type="text" placeholder="Ask Nova…">
+  <button class="send"><i class="fas fa-paper-plane"></i></button>
+</footer>
+
+<!-- ===============================
+     ATTACHMENT SHEET (CHATGPT STYLE)
+================================= -->
+<div id="attachOverlay" class="attach-overlay" onclick="closeAttach()"></div>
+
+<div id="attachSheet" class="attach-sheet">
+  <div class="attach-drag"></div>
+
+  <div class="attach-list">
+    <button class="attach-item" onclick="openCamera()">
+      📷 <span>Camera</span>
+    </button>
+
+    <button class="attach-item" onclick="openPhotos()">
+      🖼 <span>Photos</span>
+    </button>
+
+    <button class="attach-item" onclick="openFiles()">
+      📎 <span>Files</span>
+    </button>
+  </div>
+</div>
+
+<!-- HIDDEN INPUTS -->
+<input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
+<input type="file" id="photoInput" accept="image/*" hidden>
+<input type="file" id="fileInput" hidden>
+
+<!-- ===============================
+     PREMIUM OVERLAY
+================================= -->
+<div class="premium-overlay" id="premiumOverlay"></div>
+
+<!-- PREMIUM SHEET -->
+<div class="premium-sheet" id="premiumSheet">
+  <div class="drag"></div>
+
+  <h2 class="premium-title">⚡ VIPro Console</h2>
+  <p class="sub power-line">
+    Unleash the full reasoning engine. Smarter • Faster • Unlimited
+  </p>
+
+  <div class="power-grid">
+    <div class="p-item free">🔒 Daily limit: 10 messages</div>
+    <div class="p-item free">🧠 Standard AI brain</div>
+
+    <div class="p-item pro">⚡ Unlimited conversations</div>
+    <div class="p-item pro">🧠 VI-X reasoning engine</div>
+    <div class="p-item pro">🚀 Priority responses</div>
+    <div class="p-item pro">🛡️ Cooldown-free, full access</div>
+    <div class="p-item pro">🎨 Enhanced UI & UX effects</div>
+    <div class="p-item pro">💡 Smart suggestions & templates</div>
+  </div>
+
+  <button class="buy-btn">Unlock VI Pro</button>
+</div>
+
 <script src="script.js"></script>
+
+<script>
+  /* Try Go → Premium */
+  const tryGoBtn = document.getElementById("tryGoBtn");
+  tryGoBtn.addEventListener("click", () => {
+    if (typeof openPremium === "function") openPremium();
+  });
+
+  /* Close premium on overlay */
+  const premiumOverlay = document.getElementById("premiumOverlay");
+  premiumOverlay.addEventListener("click", () => {
+    if (typeof closePremium === "function") closePremium();
+  });
+</script>
 
 </body>
 </html>
