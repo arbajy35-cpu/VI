@@ -1,34 +1,38 @@
 package com.nexora.vi;
 
 import android.os.Bundle;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
-    WebView webView;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // layout load
         setContentView(R.layout.main);
 
-        // WebView connect
-        webView = findViewById(R.id.webview);
+        // Toolbar setup
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // enable basic settings
-        WebSettings settings = webView.getSettings();
-        settings.setJavaScriptEnabled(true);
+        // IMPORTANT: use correct ID (webView not webview)
+        webView = findViewById(R.id.webView);
 
-        // open links inside app
+        webView.getSettings().setJavaScriptEnabled(true);
+
         webView.setWebViewClient(new WebViewClient());
 
-        // load local file
         webView.loadUrl("file:///android_asset/index.html");
     }
 
+    @Override
+    public void onBackPressed() {
+        // disable back
+    }
 }
