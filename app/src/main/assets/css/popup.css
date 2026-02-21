@@ -1,0 +1,145 @@
+/* ===============================
+ATTACHMENT SHEET
+================================ */
+.attach-overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.45);
+opacity:0;
+pointer-events:none;
+transition:.3s;
+z-index:80;
+}
+
+.attach-overlay.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.attach-sheet{
+position:fixed;
+left:0;
+right:0;
+bottom:64px;
+background:#0f0f0f;
+border-radius:22px 22px 0 0;
+padding:12px 14px 20px;
+transform:translateY(120%);
+transition:.35s cubic-bezier(.2,.8,.2,1);
+z-index:81;
+max-height:60vh;
+overflow-y:auto;
+}
+
+.attach-sheet.show{
+transform:translateY(0);
+}
+
+.attach-drag{
+width:36px;
+height:4px;
+background:#555;
+border-radius:10px;
+margin:0 auto 12px;
+}
+
+.attach-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.attach-item{
+height:52px;
+border:none;
+border-radius:14px;
+background:#1a1a1a;
+color:#fff;
+font-size:15px;
+display:flex;
+align-items:center;
+gap:12px;
+padding:0 16px;
+cursor:pointer;
+}
+
+.attach-item:hover{
+background:#222;
+}
+
+/* ===============================
+PREMIUM POPUP
+================================ */
+.premium-overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+display:none;
+z-index:90;
+}
+
+.premium-sheet{
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+max-height:72vh;
+background:linear-gradient(180deg,#151528,#0b0b12);
+border-radius:28px 28px 0 0;
+padding:16px 16px 20px;
+transform:translateY(100%);
+transition:.45s cubic-bezier(.18,.89,.32,1.28);
+z-index:91;
+}
+
+.drag{
+width:42px;
+height:4px;
+background:#666;
+border-radius:10px;
+margin:0 auto 10px;
+}
+
+.premium-title{
+font-size:18px;
+font-weight:800;
+}
+
+.power-line{
+font-size:13px;
+opacity:.7;
+margin-bottom:12px;
+}
+
+.power-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.p-item{
+padding:10px 12px;
+border-radius:14px;
+font-size:13px;
+}
+
+.p-item.free{
+background:#1a1a1a;
+color:#aaa;
+}
+
+.p-item.pro{
+background:linear-gradient(135deg,#7c6cff,#5f54ff);
+font-weight:600;
+}
+
+.buy-btn{
+width:100%;
+height:48px;
+margin-top:16px;
+border:none;
+border-radius:26px;
+background:linear-gradient(135deg,#ffd36a,#ff9f3f);
+font-weight:800;
+cursor:pointer;
+}

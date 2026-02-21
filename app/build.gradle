@@ -1,5 +1,9 @@
 plugins {
+<<<<<<< HEAD
     id 'com.android.application'
+=======
+    id "com.android.application"
+>>>>>>> bd07e39 (fix: webview crash + JS safe + back button)
 }
 
 android {
@@ -12,21 +16,45 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
+
+        // Java 17 support
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_17
+            targetCompatibility JavaVersion.VERSION_17
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+<<<<<<< HEAD
+=======
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+>>>>>>> bd07e39 (fix: webview crash + JS safe + back button)
         }
     }
 
+    // ✅ Bindings
     buildFeatures {
         viewBinding true
+<<<<<<< HEAD
         dataBinding true
+=======
+        dataBinding true   // <-- Added DataBinding
+>>>>>>> bd07e39 (fix: webview crash + JS safe + back button)
     }
+
+    // Optional: Enable Jetpack Compose in future if needed
+    // buildFeatures {
+    //     compose true
+    // }
 }
 
 dependencies {
+<<<<<<< HEAD
 
     // 🔥 MUST — for AppCompatActivity
     implementation "androidx.appcompat:appcompat:1.6.1"
@@ -36,4 +64,17 @@ dependencies {
 
     // optional but safe
     implementation "com.google.android.material:material:1.11.0"
+=======
+    // ✅ AndroidX Libraries
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+
+    // ✅ Material Design
+    implementation "com.google.android.material:material:1.11.0"
+
+    // Optional helpers
+    // implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
+    // implementation "androidx.activity:activity-ktx:1.9.1"
+>>>>>>> bd07e39 (fix: webview crash + JS safe + back button)
 }

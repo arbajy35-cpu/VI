@@ -1,0 +1,89 @@
+/* ===============================
+SIDEBAR
+================================ */
+.sidebar{
+position:fixed;
+top:0;
+left:-280px;
+width:280px;
+height:100%;
+background:#0f0f0f;
+transition:transform .35s cubic-bezier(.4,0,.2,1);
+z-index:10;
+display:flex;
+flex-direction:column;
+}
+
+.sidebar.open{
+transform:translateX(280px);
+}
+
+.sidebar-header{
+padding:14px 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #1f1f1f;
+}
+
+.sidebar-header h3{
+font-size:16px;
+font-weight:700;
+}
+
+.chat-history{
+flex:1;
+padding:8px;
+overflow-y:auto;
+}
+
+.chat-item{
+padding:10px 12px;
+border-radius:12px;
+font-size:14px;
+opacity:.8;
+cursor:pointer;
+margin-bottom:4px;
+}
+
+.chat-item:hover,
+.chat-item.active{
+background:#1b1b1b;
+opacity:1;
+}
+
+.sidebar-footer{
+padding:10px;
+border-top:1px solid #1f1f1f;
+}
+
+.side-btn{
+padding:10px;
+font-size:14px;
+opacity:.8;
+cursor:pointer;
+border-radius:12px;
+}
+
+.side-btn:hover{
+background:#1b1b1b;
+opacity:1;
+}
+
+/* ===============================
+OVERLAY (SIDEBAR)
+================================ */
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+opacity:0;
+pointer-events:none;
+transition:.3s;
+z-index:9;
+}
+
+.overlay.show{
+opacity:1;
+pointer-events:auto;
+}
