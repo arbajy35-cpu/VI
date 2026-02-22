@@ -1,18 +1,15 @@
 package com.nexora.vi;
 
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
-=======
 import android.os.Environment;
 import android.webkit.*;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.*;
->>>>>>> bd07e39 (fix: webview crash + JS safe + back button)
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
 
         setContentView(R.layout.main);
         webView = findViewById(R.id.webview);
@@ -53,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 showError("JS ERROR:\n" + message + "\nline: " + lineNumber);
             }
         });
-=======
 
         try {
             setContentView(R.layout.main);
@@ -61,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             webView = findViewById(R.id.webview);
             if (webView == null)
                 throw new RuntimeException("WebView not found! Check layout ID");
->>>>>>> bd07e39 (fix: webview crash + JS safe + back button)
 
             // WebView settings
             WebSettings s = webView.getSettings();

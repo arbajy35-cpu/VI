@@ -4,34 +4,26 @@
 
     <!-- Internet for WebView -->
     <uses-permission android:name="android.permission.INTERNET"/>
-<<<<<<< HEAD
     
     <!-- Storage permissions for log export -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-=======
->>>>>>> bd07e39 (fix: webview crash + JS safe + back button)
 
     <application
         android:allowBackup="true"
         android:label="VI"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-<<<<<<< HEAD
-=======
 
->>>>>>> bd07e39 (fix: webview crash + JS safe + back button)
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true">
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
-<<<<<<< HEAD
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             android:configChanges="orientation|screenSize|keyboardHidden|uiMode">
-=======
 
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -39,7 +31,6 @@
 
             android:configChanges=
                 "orientation|screenSize|keyboardHidden|uiMode">
->>>>>>> bd07e39 (fix: webview crash + JS safe + back button)
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
