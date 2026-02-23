@@ -138,20 +138,35 @@
   <button class="buy-btn">Unlock VI Pro</button>
 </div>
 
-<script type="module" src="js/script.js"></script>
+<script src="js/script.js"></script>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
   /* Try Go → Premium */
   const tryGoBtn = document.getElementById("tryGoBtn");
-  tryGoBtn.addEventListener("click", () => {
-    if (typeof openPremium === "function") openPremium();
-  });
+  if (tryGoBtn) {
+    tryGoBtn.addEventListener("click", function () {
+      if (typeof openPremium === "function") {
+        openPremium();
+      } else {
+        console.log("openPremium not found");
+      }
+    });
+  }
 
   /* Close premium on overlay */
   const premiumOverlay = document.getElementById("premiumOverlay");
-  premiumOverlay.addEventListener("click", () => {
-    if (typeof closePremium === "function") closePremium();
-  });
+  if (premiumOverlay) {
+    premiumOverlay.addEventListener("click", function () {
+      if (typeof closePremium === "function") {
+        closePremium();
+      }
+    });
+  }
+
+});
+
 </script>
 
 </body>
