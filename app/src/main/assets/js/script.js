@@ -1,20 +1,17 @@
 // ===============================
-// VI Engine - Advanced Loader v4
+// VI Engine - Advanced Loader v5 (Stable)
 // ===============================
 
 (function () {
 
-  // ===============================
-  // GLOBAL NAMESPACE
-  // ===============================
-
   window.VI = window.VI || {};
 
-  VI.version = "4.0.0";
+  VI.version = "5.0.0";
   VI.modules = {};
   VI.loadedScripts = new Set();
   VI.events = {};
   VI.debug = true;
+  VI.basePath = detectBasePath();
 
   log("VI Engine Booting...");
 
@@ -22,8 +19,15 @@
     if (VI.debug) console.log("[VI]", msg);
   }
 
+  function detectBasePath() {
+    const currentScript = document.currentScript;
+    if (!currentScript) return "/";
+    const src = currentScript.src;
+    return src.substring(0, src.lastIndexOf("/") + 1);
+  }
+
   // ===============================
-  // EVENT BUS SYSTEM
+  // EVENT BUS
   // ===============================
 
   VI.on = function (event, callback) {
@@ -37,73 +41,75 @@
   };
 
   // ===============================
-  // SEQUENTIAL SCRIPT LOADER
+  // SCRIPT LOADER
   // ===============================
 
   function loadScriptsSequentially(scripts, callback) {
     if (!scripts.length) {
       log("All modules loaded.");
-      if (callback) callback();
+      callback && callback();
       return;
     }
 
     const src = scripts.shift();
+    const fullPath = VI.basePath + src;
 
-    // Prevent duplicate loading
-    if (VI.loadedScripts.has(src)) {
+    if (VI.loadedScripts.has(fullPath)) {
       loadScriptsSequentially(scripts, callback);
       return;
     }
 
     const script = document.createElement("script");
-    script.src = src;
-    script.defer = true;
+    script.src = fullPath;
 
     script.onload = function () {
-      VI.loadedScripts.add(src);
-      log(`Loaded: ${src}`);
+      VI.loadedScripts.add(fullPath);
+      log("Loaded: " + fullPath);
       loadScriptsSequentially(scripts, callback);
     };
 
     script.onerror = function () {
-      console.error("[VI] Failed to load:", src);
+      console.error("[VI] FAILED TO LOAD:", fullPath);
     };
 
     document.head.appendChild(script);
   }
 
   // ===============================
-  // MODULE REGISTRATION
+  // MODULE REGISTER
   // ===============================
 
   VI.register = function (name, module) {
     if (VI.modules[name]) {
-      console.warn(`[VI] Module already registered: ${name}`);
+      console.warn("[VI] Module already registered:", name);
       return;
     }
 
     VI.modules[name] = module;
-    log(`Module registered: ${name}`);
+    log("Module registered: " + name);
   };
 
   // ===============================
-  // INITIALIZATION SYSTEM
+  // INIT SYSTEM
   // ===============================
 
   VI.init = function () {
+    log("Initializing modules...");
+
     Object.keys(VI.modules).forEach(name => {
       const module = VI.modules[name];
       if (typeof module.init === "function") {
         module.init();
+        log("Initialized: " + name);
       }
     });
 
     VI.emit("ready");
-    log("VI Engine Initialized Successfully 🚀");
+    log("VI Engine Ready 🚀");
   };
 
   // ===============================
-  // MODULE LIST
+  // MODULE FILE LIST
   // ===============================
 
   const scripts = [
@@ -111,15 +117,17 @@
     "sidebar.js",
     "chat.js",
     "premium.js",
-    "attach.js",
+    "attach.js"
   ];
 
   // ===============================
-  // START LOADING
+  // START ENGINE AFTER DOM READY
   // ===============================
 
-  loadScriptsSequentially([...scripts], function () {
-    VI.init();
+  document.addEventListener("DOMContentLoaded", function () {
+    loadScriptsSequentially([...scripts], function () {
+      VI.init();
+    });
   });
 
 })();

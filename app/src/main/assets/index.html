@@ -66,41 +66,22 @@
 </main>
 
 <div class="input-bar">
-
   <button class="plus">+</button>
-
   <div class="pill">
-
     <input type="text" placeholder="Ask Nova...">
-
     <button class="mic">🎤</button>
-
     <button class="send">➤</button>
-
   </div>
-
 </div>
 
-<!-- ===============================
-     ATTACHMENT SHEET (CHATGPT STYLE)
-================================= -->
+<!-- ATTACHMENT SHEET -->
 <div id="attachOverlay" class="attach-overlay" onclick="closeAttach()"></div>
-
 <div id="attachSheet" class="attach-sheet">
   <div class="attach-drag"></div>
-
   <div class="attach-list">
-    <button class="attach-item" onclick="openCamera()">
-      📷 <span>Camera</span>
-    </button>
-
-    <button class="attach-item" onclick="openPhotos()">
-      🖼 <span>Photos</span>
-    </button>
-
-    <button class="attach-item" onclick="openFiles()">
-      📎 <span>Files</span>
-    </button>
+    <button class="attach-item" onclick="openCamera()">📷 <span>Camera</span></button>
+    <button class="attach-item" onclick="openPhotos()">🖼 <span>Photos</span></button>
+    <button class="attach-item" onclick="openFiles()">📎 <span>Files</span></button>
   </div>
 </div>
 
@@ -109,24 +90,18 @@
 <input type="file" id="photoInput" accept="image/*" hidden>
 <input type="file" id="fileInput" hidden>
 
-<!-- ===============================
-     PREMIUM OVERLAY
-================================= -->
+<!-- PREMIUM OVERLAY -->
 <div class="premium-overlay" id="premiumOverlay"></div>
 
 <!-- PREMIUM SHEET -->
 <div class="premium-sheet" id="premiumSheet">
   <div class="drag"></div>
-
   <h2 class="premium-title">⚡ VIPro Console</h2>
-  <p class="sub power-line">
-    Unleash the full reasoning engine. Smarter • Faster • Unlimited
-  </p>
+  <p class="sub power-line">Unleash the full reasoning engine. Smarter • Faster • Unlimited</p>
 
   <div class="power-grid">
     <div class="p-item free">🔒 Daily limit: 10 messages</div>
     <div class="p-item free">🧠 Standard AI brain</div>
-
     <div class="p-item pro">⚡ Unlimited conversations</div>
     <div class="p-item pro">🧠 VI-X reasoning engine</div>
     <div class="p-item pro">🚀 Priority responses</div>
@@ -138,20 +113,16 @@
   <button class="buy-btn">Unlock VI Pro</button>
 </div>
 
+<!-- MAIN SCRIPT -->
 <script src="js/script.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
   /* Try Go → Premium */
   const tryGoBtn = document.getElementById("tryGoBtn");
   if (tryGoBtn) {
     tryGoBtn.addEventListener("click", function () {
-      if (typeof openPremium === "function") {
-        openPremium();
-      } else {
-        console.log("openPremium not found");
-      }
+      if (typeof openPremium === "function") openPremium();
     });
   }
 
@@ -159,14 +130,33 @@ document.addEventListener("DOMContentLoaded", function () {
   const premiumOverlay = document.getElementById("premiumOverlay");
   if (premiumOverlay) {
     premiumOverlay.addEventListener("click", function () {
-      if (typeof closePremium === "function") {
-        closePremium();
-      }
+      if (typeof closePremium === "function") closePremium();
     });
   }
-
 });
+</script>
 
+<!-- LIVE ERROR LOGGER -->
+<script>
+(function(){
+function send(data){
+  fetch("/log",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(data)
+  }).catch(()=>{});
+}
+
+window.onerror = function(msg,url,line,col,error){
+  send({type:"error",message:msg,file:url,line:line,stack:error?.stack});
+};
+
+const oldLog = console.log;
+console.log = function(...args){
+  oldLog.apply(console,args);
+  send({type:"log",message:args.join(" ")});
+};
+})();
 </script>
 
 </body>

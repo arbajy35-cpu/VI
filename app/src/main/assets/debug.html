@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VI Debug Panel</title>
+
+<style>
+body { background:#111; color:#00ff88; font-family:monospace; padding:20px; }
+.ok { color:#00ff88; }
+.fail { color:#ff4444; }
+.warn { color:#ffaa00; }
+.section { margin-top:20px; }
+</style>
+
+<!-- ONLY LOAD ENGINE -->
+<script src="js/script.js" defer></script>
+
+</head>
+<body>
+
+<h2>🚀 VI Engine Debug</h2>
+
+<div class="section">
+<h3>Engine Status</h3>
+<div id="engine"></div>
+</div>
+
+<div class="section">
+<h3>Registered Modules</h3>
+<div id="modules"></div>
+</div>
+
+<div class="section">
+<h3>Init Execution Check</h3>
+<div id="initStatus"></div>
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  setTimeout(() => {
+
+    const engineDiv = document.getElementById("engine");
+    const modulesDiv = document.getElementById("modules");
+    const initDiv = document.getElementById("initStatus");
+
+    // 1️⃣ Check VI exists
+    if (typeof VI === "undefined") {
+      engineDiv.innerHTML = `<div class="fail">❌ VI object NOT found</div>`;
+      return;
+    }
+
+    engineDiv.innerHTML = `
+      <div class="ok">✅ VI object exists</div>
+      <div class="ok">Version: ${VI.version}</div>
+    `;
+
+    // 2️⃣ Check Modules
+    const moduleNames = Object.keys(VI.modules);
+
+    if (moduleNames.length === 0) {
+      modulesDiv.innerHTML = `<div class="fail">❌ No modules registered</div>`;
+    } else {
+      modulesDiv.innerHTML = `
+        <div class="ok">✅ ${moduleNames.length} modules registered:</div>
+        <div class="warn">${moduleNames.join("<br>")}</div>
+      `;
+    }
+
+    // 3️⃣ Check init ran
+    if (VI.events && VI.events.ready) {
+      initDiv.innerHTML = `<div class="ok">✅ VI.init() executed (ready event exists)</div>`;
+    } else {
+      initDiv.innerHTML = `<div class="warn">⚠ Cannot confirm ready event</div>`;
+    }
+
+  }, 500);
+
+});
+
+</script>
+
+</body>
+</html>
