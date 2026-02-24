@@ -1,59 +1,26 @@
-// ===============================
-// PREMIUM SYSTEM
-// ===============================
+VI.register("premium", {
 
-window.triggerProIntro = function () {
+  init() {},
 
-  if (window.premiumTriggered) return;
+  trigger() {
 
-  window.premiumTriggered = true;
+    const chatArea = document.getElementById("chatArea");
+    if (!chatArea) return;
 
-  const chatArea = document.getElementById("chatArea");
+    const card = document.createElement("div");
+    card.className = "message ai";
 
-  if (!chatArea) return;
+    card.innerHTML = `
+      <div class="go-card">
+        <p>
+          <b>Try Nova Pro</b><br>
+          Faster replies • Unlimited chats
+        </p>
+        <button class="go-upgrade">Upgrade</button>
+      </div>
+    `;
 
-  const card = document.createElement("div");
+    chatArea.appendChild(card);
+  }
 
-  card.className = "message ai";
-
-  card.innerHTML = `
-    <div class="go-card">
-      <p>
-        <b>Try Nova Pro</b><br>
-        Faster replies • Unlimited chats • Nova-X reasoning
-      </p>
-      <button class="go-upgrade">Upgrade</button>
-    </div>
-  `;
-
-  chatArea.appendChild(card);
-
-  card.querySelector(".go-upgrade").onclick = window.openPremium;
-
-};
-
-window.openPremium = function () {
-
-  const overlay = document.getElementById("premiumOverlay");
-  const sheet = document.getElementById("premiumSheet");
-
-  overlay.style.display = "block";
-
-  sheet.style.transform = "translateY(0)";
-
-};
-
-window.closePremium = function () {
-
-  const overlay = document.getElementById("premiumOverlay");
-  const sheet = document.getElementById("premiumSheet");
-
-  sheet.style.transform = "translateY(100%)";
-
-  setTimeout(() => {
-
-    overlay.style.display = "none";
-
-  }, 300);
-
-};
+});
