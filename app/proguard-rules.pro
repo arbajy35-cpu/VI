@@ -1,17 +1,48 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in C:\tools\adt-bundle-windows-x86_64-20131030\sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+#############################################
+# BASIC ANDROID RULES
+#############################################
 
-# Add any project specific keep options here:
+# Keep app package name
+-keep class com.nexora.vi.** { *; }
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep MainActivity
+-keep public class com.nexora.vi.MainActivity { *; }
+
+#############################################
+# WEBVIEW PROTECTION
+#############################################
+
+# Keep WebView classes
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
+# Keep WebChromeClient / WebViewClient
+-keep class android.webkit.** { *; }
+
+#############################################
+# REMOVE LOGS IN RELEASE
+#############################################
+
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** i(...);
+    public static *** v(...);
+    public static *** w(...);
+}
+
+#############################################
+# OPTIMIZATION
+#############################################
+
+-optimizationpasses 5
+-overloadaggressively
+-repackageclasses ''
+-flattenpackagehierarchy
+
+#############################################
+# REMOVE DEBUG INFO
+#############################################
+
+-dontwarn
+-ignorewarnings

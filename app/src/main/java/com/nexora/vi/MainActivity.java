@@ -1,24 +1,37 @@
 package com.nexora.vi;
 
+import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.ConsoleMessage;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
+    private static final byte ENCRYPT_KEY = 0x5A; // same as encrypt.py
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        // --- STORAGE PERMISSION CHECK FOR ANDROID 11+ ---
+        requestFullStorageIfNeeded();
 
         // --- CREATE HIDDEN STORAGE ---
         createHiddenStorage();
@@ -37,30 +50,26 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage cm) {
-                // ignore console messages
-                return true;
+                return true; // ignore console logs
             }
         });
 
-        // Load local HTML
-        webView.loadUrl("file:///android_asset/index.html");
+        // --- LOAD ENCRYPTED HTML ---
+        loadEncryptedHTML("index.enc");
     }
 
-    // --- BACK PRESS ---
     @Override
     public void onBackPressed() {
         if (webView.canGoBack()) webView.goBack();
         else super.onBackPressed();
     }
 
-    // --- HIDDEN STORAGE CREATION ---
+    // --- CREATE HIDDEN STORAGE ---
     private void createHiddenStorage() {
         try {
-            // Path similar to /storage/emulated/0/Android/data/com.nexora.vi/files/.vi_hidden
             File baseDir = new File(getExternalFilesDir(null), ".vi_hidden");
             if (!baseDir.exists()) baseDir.mkdirs();
 
-            // Dummy file to make folder "look alive"
             File dummyFile = new File(baseDir, "readme.txt");
             if (!dummyFile.exists()) {
                 FileOutputStream fos = new FileOutputStream(dummyFile);
@@ -69,6 +78,41 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    // --- LOAD ENCRYPTED HTML FROM ASSETS ---
+    private void loadEncryptedHTML(String assetFileName) {
+        try {
+            InputStream is = getAssets().open(assetFileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            // Decrypt runtime
+            for (int i = 0; i < buffer.length; i++) {
+                buffer[i] = (byte) (buffer[i] ^ ENCRYPT_KEY);
+            }
+
+            // Convert to string & load in WebView
+            String htmlContent = new String(buffer);
+            webView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // --- REQUEST MANAGE_EXTERNAL_STORAGE FOR ANDROID 11+ ---
+    private void requestFullStorageIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                Toast.makeText(this, "Please allow full storage access", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            }
         }
     }
 }
