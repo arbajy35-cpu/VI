@@ -9,41 +9,51 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      ANDROID_HOME: /usr/local/android-sdk
+
     steps:
       # 1️⃣ Checkout project
       - name: Checkout project
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up JDK 17
+      # 2️⃣ Set up JDK 17 (OpenJDK 17)
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 3️⃣ Setup Android SDK
+      # 3️⃣ Install Android SDK & command-line tools
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          build-tools: 34.0.0
+          ndk: 25.2.9519653
+          components: platform-tools, build-tools;34.0.0, platforms;android-34
 
-      # 4️⃣ Install SDK platforms & build-tools (explicit)
-      - name: Install SDK Platforms & Build Tools
-        run: |
-          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
-          yes | sdkmanager --licenses
+      # 4️⃣ Accept licenses
+      - name: Accept licenses
+        run: yes | sdkmanager --licenses
 
-      # 5️⃣ Grant gradle execute permission
+      # 5️⃣ Grant gradlew execute permission
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
-      # 6️⃣ Clean project & refresh dependencies
+      # 6️⃣ Ensure Gradle wrapper uses 8.6
+      - name: Upgrade Gradle Wrapper
+        run: ./gradlew wrapper --gradle-version 8.6 --distribution-type all
+
+      # 7️⃣ Clean project & refresh dependencies
       - name: Clean & Refresh Dependencies
         run: ./gradlew clean --refresh-dependencies
 
-      # 7️⃣ Build APK with full stacktrace
-      - name: Build Debug APK (Clean Logs)
-        run: ./gradlew assembleDebug --refresh-dependencies --stacktrace --no-daemon --warning-mode all
+      # 8️⃣ Build APK (Debug + Stacktrace)
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace --no-daemon --warning-mode all
 
-      # 8️⃣ Upload generated APK
+      # 9️⃣ Upload generated APK artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
