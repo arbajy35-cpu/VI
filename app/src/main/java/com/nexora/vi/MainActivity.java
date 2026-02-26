@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // --- LOAD ENCRYPTED HTML FROM ASSETS ---
+    // --- LOAD ENCRYPTED HTML FROM ASSETS WITH CSS/JS SUPPORT ---
     private void loadEncryptedHTML(String assetFileName) {
         try {
             InputStream is = getAssets().open(assetFileName);
@@ -90,14 +90,15 @@ public class MainActivity extends AppCompatActivity {
             is.read(buffer);
             is.close();
 
-            // Decrypt runtime
+            // --- DECRYPT HTML ---
             for (int i = 0; i < buffer.length; i++) {
                 buffer[i] = (byte) (buffer[i] ^ ENCRYPT_KEY);
             }
 
-            // Convert to string & load in WebView
             String htmlContent = new String(buffer);
-            webView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null);
+
+            // --- LOAD HTML WITH BASE URL (CSS/JS will load from assets) ---
+            webView.loadDataWithBaseURL("file:///android_asset/", htmlContent, "text/html", "UTF-8", null);
 
         } catch (IOException e) {
             e.printStackTrace();
