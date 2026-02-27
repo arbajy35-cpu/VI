@@ -1,6 +1,5 @@
 package com.nexora.vi;
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // --- LOAD ENCRYPTED HTML ---
+        // --- LOAD ENCRYPTED HTML FROM index.enc SANDBOXED ---
         loadEncryptedHTML("index.enc");
     }
 
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         else super.onBackPressed();
     }
 
-    // --- CREATE HIDDEN STORAGE ---
+    // --- CREATE HIDDEN STORAGE FOR APP ---
     private void createHiddenStorage() {
         try {
             File baseDir = new File(getExternalFilesDir(null), ".vi_hidden");
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // --- LOAD ENCRYPTED HTML FROM ASSETS WITH CSS/JS SUPPORT ---
+    // --- LOAD ENCRYPTED HTML WITH INLINE CSS/JS SANDBOX ---
     private void loadEncryptedHTML(String assetFileName) {
         try {
             InputStream is = getAssets().open(assetFileName);
@@ -97,8 +96,10 @@ public class MainActivity extends AppCompatActivity {
 
             String htmlContent = new String(buffer);
 
-            // --- LOAD HTML WITH BASE URL (CSS/JS will load from assets) ---
-            webView.loadDataWithBaseURL("file:///android_asset/", htmlContent, "text/html", "UTF-8", null);
+            // --- SANDBOX LOAD ---
+            // baseURL=null → WebView sandbox mode
+            // Sab CSS/JS already index.enc me inline
+            webView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null);
 
         } catch (IOException e) {
             e.printStackTrace();
