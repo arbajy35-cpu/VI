@@ -12,12 +12,12 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
+    }
 
-        // Java 17 support
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_17
-            targetCompatibility JavaVersion.VERSION_17
-        }
+    // ✅ Java 17 support (correct place)
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     buildTypes {
@@ -33,25 +33,20 @@ android {
     // ✅ Bindings
     buildFeatures {
         viewBinding true
-        dataBinding true   // <-- Added DataBinding
+        dataBinding true
     }
 
-    // Optional: Enable Jetpack Compose in future if needed
-    // buildFeatures {
-    //     compose true
-    // }
+    // ✅ ADD THIS (Important 🔥)
+    sourceSets {
+        main {
+            assets.srcDirs += "$buildDir/generated"
+        }
+    }
 }
 
 dependencies {
-    // ✅ AndroidX Libraries
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.core:core-ktx:1.12.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
-
-    // ✅ Material Design
     implementation "com.google.android.material:material:1.11.0"
-
-    // Optional helpers (enable if needed)
-    // implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
-    // implementation "androidx.activity:activity-ktx:1.9.1"
 }
