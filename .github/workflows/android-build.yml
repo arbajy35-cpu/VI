@@ -1,4 +1,4 @@
-name: Build APK
+name: Secure Build
 
 on:
   push:
@@ -17,14 +17,24 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up JDK 17 (OpenJDK 17)
+      # 2️⃣ Setup Python (for encrypt.py)
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # 3️⃣ Run Encryption Script
+      - name: Generate Encrypted Bundle
+        run: python encrypt.py
+
+      # 4️⃣ Set up JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 3️⃣ Install Android SDK & command-line tools
+      # 5️⃣ Setup Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
@@ -33,29 +43,29 @@ jobs:
           ndk: 25.2.9519653
           components: platform-tools, build-tools;34.0.0, platforms;android-34
 
-      # 4️⃣ Accept licenses
+      # 6️⃣ Accept licenses
       - name: Accept licenses
         run: yes | sdkmanager --licenses
 
-      # 5️⃣ Grant gradlew execute permission
+      # 7️⃣ Grant gradlew permission
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
-      # 6️⃣ Ensure Gradle wrapper uses 8.6
+      # 8️⃣ Ensure Gradle wrapper 8.6
       - name: Upgrade Gradle Wrapper
         run: ./gradlew wrapper --gradle-version 8.6 --distribution-type all
 
-      # 7️⃣ Clean project & refresh dependencies
-      - name: Clean & Refresh Dependencies
+      # 9️⃣ Clean project
+      - name: Clean Project
         run: ./gradlew clean --refresh-dependencies
 
-      # 8️⃣ Build APK (Debug + Stacktrace)
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace --no-daemon --warning-mode all
+      # 🔟 Build Release APK
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --stacktrace --no-daemon --warning-mode all
 
-      # 9️⃣ Upload generated APK artifact
+      # 1️⃣1️⃣ Upload Release APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: VI-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          name: VI-release-apk
+          path: app/build/outputs/apk/release/*.apk
