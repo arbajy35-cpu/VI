@@ -5,33 +5,31 @@ import sys
 # 🔐 Simple XOR Key
 KEY = 0x5A
 
-# 📁 Detect project root (script jaha hai wahi root maan lo)
+# 📁 Detect project root (script location = project root)
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 ASSETS_DIR = os.path.join(PROJECT_ROOT, "app", "src", "main", "assets")
-BUILD_DIR = os.path.join(PROJECT_ROOT, "app", "build", "generated")
+OUTPUT_DIR = ASSETS_DIR   # ✅ Direct inside assets
+TEMP_ZIP = os.path.join(PROJECT_ROOT, "temp_bundle.zip")
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "pkg_enc")
 
-TEMP_ZIP = os.path.join(BUILD_DIR, "temp_bundle.zip")
-OUTPUT_FILE = os.path.join(BUILD_DIR, "pkg_enc")
+print("📂 Project Root:", PROJECT_ROOT)
+print("📦 Assets Dir:", ASSETS_DIR)
 
-print("Project Root:", PROJECT_ROOT)
-print("Assets Dir:", ASSETS_DIR)
-
-# 📁 Ensure assets exist
+# ❌ Stop if assets folder missing
 if not os.path.exists(ASSETS_DIR):
     print("❌ ERROR: Assets directory not found!")
     sys.exit(1)
 
-# 📁 Create build directory safely
-os.makedirs(BUILD_DIR, exist_ok=True)
-
 
 def create_zip():
-    print("📦 Creating ZIP bundle...")
+    print("\n📦 Creating ZIP bundle...")
 
     with zipfile.ZipFile(TEMP_ZIP, "w", zipfile.ZIP_DEFLATED) as z:
         for root, dirs, files in os.walk(ASSETS_DIR):
             for file in files:
+
+                # 🚫 Skip encrypted file if exists
                 if file == "pkg_enc":
                     continue
 
@@ -45,12 +43,16 @@ def create_zip():
 
 
 def encrypt_zip():
-    print("🔐 Encrypting bundle...")
+    print("\n🔐 Encrypting bundle...")
 
     with open(TEMP_ZIP, "rb") as f:
         data = f.read()
 
     encrypted = bytes([b ^ KEY for b in data])
+
+    # Remove old pkg_enc if exists
+    if os.path.exists(OUTPUT_FILE):
+        os.remove(OUTPUT_FILE)
 
     with open(OUTPUT_FILE, "wb") as f:
         f.write(encrypted)

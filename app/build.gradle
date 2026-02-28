@@ -14,7 +14,7 @@ android {
         versionName "1.0"
     }
 
-    // ✅ Java 17 support (correct place)
+    // ✅ Java 17 support
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -30,16 +30,15 @@ android {
         }
     }
 
-    // ✅ Bindings
     buildFeatures {
         viewBinding true
         dataBinding true
     }
 
-    // ✅ ADD THIS (Important 🔥)
+    // ✅ Include generated encrypted assets safely
     sourceSets {
         main {
-            assets.srcDirs += "$buildDir/generated"
+            assets.srcDir("$buildDir/generated/assets")
         }
     }
 }
@@ -50,3 +49,21 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation "com.google.android.material:material:1.11.0"
 }
+
+/* =====================================================
+   🔐 Encryption Task (Runs Before Assets Merge)
+   ===================================================== */
+
+tasks.register("generateEncryptedAssets") {
+    doLast {
+        exec {
+            commandLine "python", "encrypt.py"
+        }
+    }
+}
+
+// 🔥 Make sure encryption runs before assets merge
+tasks.matching { it.name.contains("merge") && it.name.contains("Assets") }
+        .configureEach {
+            dependsOn("generateEncryptedAssets")
+        }
